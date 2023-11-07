@@ -50,7 +50,6 @@ const TypeBuss: React.FC = () => {
   }, [fetch]);
 
   const showFormModal = () => {
-    console.log("show modal")
     setVisible(true);
   };
 
@@ -116,11 +115,6 @@ const TypeBuss: React.FC = () => {
     setEditingKey(0);
   };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    fetch(pagination);
-    cancel();
-  };
-
   const handleDeleteRow =async (rowId: number) => {
     try {
       const rs = await DeleteBusData({name:"type-bus",id:rowId});
@@ -129,6 +123,11 @@ const TypeBuss: React.FC = () => {
     } catch (error) {
       message.success("Delete failed");
     }
+  };
+  
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    fetch(pagination);
+    cancel();
   };
 
   const isEditing = (record: TypeBus) => record.id === editingKey;
