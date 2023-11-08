@@ -267,7 +267,7 @@ const TravelRouteComponent = () => {
         <Button type="default" style={{ "marginBottom": 15 + 'px' }} onClick={showFormModal}>
           {t('common.create')}
         </Button>
-        <AddTypeBusFormModal visible={visible} onCancel={hideFormModal} routes={tableData.routeList} busSchedule={tableData.busSchedule} SpecialSchedule={[]} />
+        <AddTypeBusFormModal visible={visible} onCancel={hideFormModal} routes={tableData.routeList} busSchedule={tableData.busSchedule} SpecialSchedule={[]} DoW={DoW} />
       </BaseButtonsForm.Provider>
 
 

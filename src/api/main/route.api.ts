@@ -64,6 +64,10 @@ interface DeleteType {
     name:"route"|"schedule"|"travel-route"|"special-schedule",
     id:number
 }
+
+export interface ErrorRes {
+    type:"Exists"|"invalid"
+}
 /// location
 export const getLocationTableData = async (pagination: Pagination): Promise<TableData<Location>> => {
     const rs = await httpApi.get<Location[]>('route/get-data?type=location');
@@ -86,7 +90,7 @@ export const getBusScheduleTableData = async (pagination: Pagination): Promise<T
     return new Promise((res) => res({ data: rs.data, pagination: { ...pagination, total: 16 }, }));
 };
 
-export const CreateBusSchedule = async (data: BusSchedule): Promise<BusSchedule> => await httpApi.post<BusSchedule>("route/create-bus-schedule", data).then((res) => res.data);
+export const CreateBusSchedule = async (data: BusSchedule): Promise<BusSchedule|ErrorRes> => await httpApi.post<BusSchedule|ErrorRes>("route/create-bus-schedule", data).then((res) => res.data);
 export const EditBusSchedule= async (data: BusSchedule): Promise<boolean> => await httpApi.put("route/edit-bus-schedule", data).then((res) => res.data);
 
 /// travel route

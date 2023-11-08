@@ -20,10 +20,10 @@ interface AddScheduleFormModal {
 export const AddScheduleFormModal: React.FC<AddScheduleFormModal> = ({ visible, onCancel, Bus, DoW, Status }) => {
     const [form] = BaseForm.useForm();
     const { t } = useTranslation();
-    useResetFormOnCloseModal({
-        form,
-        visible,
-    });
+    // useResetFormOnCloseModal({
+    //     form,
+    //     visible,
+    // });
 
     const onOk = () => {
         form.submit();
@@ -31,16 +31,16 @@ export const AddScheduleFormModal: React.FC<AddScheduleFormModal> = ({ visible, 
 
 
     return (
-        <Modal title={t('forms.bus.newTypeSeat')} visible={visible} onOk={onOk} onCancel={onCancel}>
+        <Modal title={t('tables.busList.createTitle')} visible={visible} onOk={onOk} onCancel={onCancel}>
             <BaseForm form={form} layout="vertical" name="typeSeatForm">
                 <Row gutter={[20, 20]}>
                     <Col sm={24} xl={12}>
                         <BaseForm.Item
                             name="dayOfWeek"
-                            label={t('tables.busList.date')}
+                            label={t('tables.busList.day')}
                             rules={[{ required: true, message: t('common.requiredField') }]}
                         >
-                            <Select>
+                            <Select placeholder={t('tables.busList.day')}>
                                 {DoW.map((e, i) => <Option key={i} value={e.value}>{e.title}</Option>)}
                             </Select>
                         </BaseForm.Item>

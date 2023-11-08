@@ -929,9 +929,11 @@
             },
             "day":"DoW",
             "time":"Time",
-            "TravelRoute":"Bus",
+            "bus":"Bus",
             "route":"Route",
-            "delay":"Time Delay"
+            "delay":"Time Delay",
+            "createTitle":"Create Week Schedule",
+            "errCreate":"The schedule is already in existence"
         },
         "typeBus":{
             "title":"Type Bus",
@@ -944,7 +946,9 @@
             "timeStart":"Time Start",
             "route":"Route",
             "schedule":"Bus Schedule",
-            "ss":"Special Schedule"
+            "ss":"Special Schedule",
+            "createTitle":"Create Daily Schedule",
+            "departureTime":"Departure Time"
         }
     },
     "tabs": {

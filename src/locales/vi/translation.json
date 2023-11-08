@@ -932,7 +932,9 @@
             "time":"Thời Gian Chạy",
             "bus":"Xe Chạy",
             "route":"Lộ Trình Di Chuyển",
-            "delay":"Thời Gian Hoãn"
+            "delay":"Thời Gian Hoãn",
+            "createTitle":"Tạo Lịch Hàng Tuần",
+            "errCreate":"Lịch trình đã tồn tại"
         },
         "typeBus":{
             "title":"Loại Xe",
@@ -945,7 +947,9 @@
             "timeStart":"Bắt Đầu",
             "route":"Tuyến Đường",
             "schedule":"Lịch Của Xe",
-            "ss":"Lịch Đặc Biệt"
+            "ss":"Lịch Đặc Biệt",
+            "createTitle":"Tạo Lịch Ngày",
+            "departureTime":"Thời Gian Khởi Hành"
         }
     },
     "tabs": {

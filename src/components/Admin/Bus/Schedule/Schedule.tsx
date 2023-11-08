@@ -11,7 +11,7 @@ import { BaseButtonsForm } from "@app/components/common/forms/BaseButtonsForm/Ba
 import { v4 as uuidv4 } from 'uuid';
 import { EditScheduleTableCell } from "./EditScheduleTableCell";
 import { AddScheduleFormModal } from "./AddScheduleFormModal";
-import { BusSchedule, EditBusSchedule, Route, getBusScheduleTableData, getRouteTableData } from "@app/api/main/route.api";
+import { BusSchedule, CreateBusSchedule, EditBusSchedule, ErrorRes, Route, getBusScheduleTableData, getRouteTableData } from "@app/api/main/route.api";
 import dayjs from "dayjs";
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { DayjsDatePicker } from "@app/components/common/pickers/DayjsDatePicker";
@@ -20,6 +20,7 @@ import { Status } from "@app/components/profile/profileCard/profileFormNav/nav/p
 import { defineColorByPriority } from "@app/utils/utils";
 import BusList from "../List/BusList";
 import { Option } from "@app/components/common/selects/Select/Select";
+import FilterWeekSchedule from "./Filter";
 
 const initialPagination: Pagination = {
   current: 1,
@@ -51,7 +52,6 @@ const Schedule: React.FC = () => {
     loading: false,
     BusList: []
   });
-  const dpk = <DayjsDatePicker />;
   const [editingKey, setEditingKey] = useState(0);
   const [visible, setVisible] = useState(false);
 
@@ -93,6 +93,19 @@ const Schedule: React.FC = () => {
     setVisible(false);
   };
 
+  const create  = async (data:any)=>{
+    const rs:BusSchedule|ErrorRes = await  CreateBusSchedule(data);
+    if(!isNaN((rs as BusSchedule).id) ){
+      const newData = [...tableData.data];
+      newData.push(rs as BusSchedule);
+      setTableData({...tableData,data:newData});
+      message.success("Create Success");
+      setVisible(false);
+    }else if((rs as ErrorRes).type){
+      message.warning(t('tables.busList.errCreate'));
+    }
+  }
+
   const save = async (key: React.Key) => {
     try {
       const row = (await form.validateFields());
@@ -112,10 +125,10 @@ const Schedule: React.FC = () => {
           setTableData({ ...tableData, data: newData });
           message.success("Edit Success");
         } else {
-          message.success("Edit Faild");
+          message.error("Edit Faild");
         }
       } else {
-        message.success("Not Found");
+        message.warning("Not Found");
       }
       setEditingKey(0);
     } catch (errInfo) {
@@ -163,7 +176,7 @@ const Schedule: React.FC = () => {
       render: (text: string, record: BusSchedule) => DoW.find(e => e.value === record.dayOfWeek)?.title
     },
     {
-      title: t('tables.busList.bus'),
+      title: t('common.busType'),
       dataIndex: 'idBus',
       width: '10%',
       editable: true,
@@ -250,48 +263,28 @@ const Schedule: React.FC = () => {
     <>
       {/* create & edit modal */}
       <Card style={{ marginBottom: "15px" }}>
-        <Row gutter={[20, 20]} justify="space-between">
-          {/* create */}
-          <Col span={12}>
-            <BaseButtonsForm.Provider
-              onFormFinish={(name, { values, forms }) => {
-                // call api post data.
-                setVisible(false);
-              }}
-            >
+        <BaseButtonsForm.Provider
+          onFormFinish={(name, { values, forms }) => {
+            // call api post data.
+            values['id']=0;
+            create(values);
+          }}
+        >
+          <Row gutter={[20, 20]} justify="space-between">
+            {/* create */}
+            <Col span={12}>
               <Button type="ghost" style={{ "marginBottom": 15 + 'px' }} onClick={showFormModal}>
                 {t('common.create')}
               </Button>
               <AddScheduleFormModal visible={visible} onCancel={hideFormModal} DoW={DoW} Bus={tableData.BusList} Status={Statuss} />
-            </BaseButtonsForm.Provider>
-          </Col>
-          {/* filter */}
-          <Col span={12}>
-            <Row gutter={[20, 20]}>
-              <Col span={8}>
-                <Form.Item>
-                  <Select placeholder={"Choose Bus"} onChange={() => console.log()}>
-                    {tableData.BusList.map((e, i) => <Option key={i} value={e.id} >{e.idTypeBusNavigation?.name}</Option>)}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item>
-                  <Select placeholder={"DoW"} onChange={() => console.log()}>
-                    {DoW.map((e, i) => <Option key={i} value={e.value} >{e.title}</Option>)}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item>
-                  <Select placeholder={"Status"} onChange={() => console.log()}>
-                    {Statuss.map((e, i) => <Option key={i} value={e.id} >{e.title}</Option>)}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+            </Col>
+            {/* filter */}
+            <Col span={12}>
+              <FilterWeekSchedule  BusList={tableData.BusList} DoW={DoW} Statuss={Statuss} t={t}  />
+            </Col>
+          </Row>
+        </BaseButtonsForm.Provider>
+
       </Card>
 
 
